@@ -13,3 +13,6 @@ Owen O'Connor and I came up with the name on a Friday evening.
 
 ### Shiny App link
 https://louisthomas.shinyapps.io/noDEWORKS/
+
+### Improvements
+I had a function for load your own data - it would crash and load up the non existent files from some temporary data. 
