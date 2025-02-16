@@ -5,7 +5,6 @@
 # Find out more about building applications with Shiny here:
 #
 #    https://shiny.posit.co/
-#
 
 library(shiny)
 library(shinydashboard)
@@ -15,27 +14,35 @@ library(tidyverse)
 library(visNetwork)
 library(geomnet)
 library(igraph)
+library(shinyscreenshot)
+library(vroom)
 
-places <- sort(c("Undead Asylum", "Firelink Shrine", "Undead Burg", "Undead Parish", "Darkroot Garden", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Depths", "Sen's Fortress", "Anor Londo", "Painted World of Ariamis", "The Catacombs", "Tomb of the Giants", "New Londo Ruins", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden"))
-node_preset_data <- data.frame(
-  id = places,
-  label = places
-)
+#places <- sort(c("Undead Asylum", "Firelink Shrine", "Undead Burg", "Undead Parish", "Darkroot Garden", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Depths", "Sen's Fortress", "Anor Londo", "Painted World of Ariamis", "The Catacombs", "Tomb of the Giants", "New Londo Ruins", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden"))
+#places <- sort(c("Undead Asylum", "Firelink Shrine", "Undead Burg", "Undead Parish", "Darkroot Garden", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Depths", "Sen's Fortress", "Anor Londo", "Painted World of Ariamis", "The Catacombs", "Tomb of the Giants", "New Londo Ruins", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden"))
+#node_preset_data <- data.frame(
+#  id = places,
+#  label = places
+#)
+#edge_preset_data <- data.frame(
+#  from = c("Undead Asylum", "Firelink Shrine", "Firelink Shrine", "Undead Burg", "Undead Burg", "Undead Parish", "Undead Parish", "Darkroot Garden", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Depths", "Sen's Fortress", "Anor Londo", "Painted World of Ariamis", "The Catacombs", "Tomb of the Giants", "New Londo Ruins", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden", "Depths", "The Duke's Archives"),
+#  to = c("Firelink Shrine", "Undead Burg", "New Londo Ruins", "Undead Parish", "Lower Undead Burg", "Darkroot Garden", "Sen's Fortress", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Demon Ruins", "Blighttown", "Anor Londo", "Painted World of Ariamis", "The Duke's Archives", "Tomb of the Giants", "Lost Izalith", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden", "Oolacile Township", "Undead Burg", "Anor Londo"),
+#  width = c(2, 3, 4, 4, 5, 3, 6, 4, 5, 6, 7, 8, 6, 7, 8, 7, 9, 10, 8, 9, 8, 9, 10, 7, 3, 6, 8, 7, 5, 6, 4, 6)+5
+#) %>% arrange(from)
 
-edge_preset_data <- data.frame(
-  from = c("Undead Asylum", "Firelink Shrine", "Firelink Shrine", "Undead Burg", "Undead Burg", "Undead Parish", "Undead Parish", "Darkroot Garden", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Depths", "Sen's Fortress", "Anor Londo", "Painted World of Ariamis", "The Catacombs", "Tomb of the Giants", "New Londo Ruins", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden", "Depths", "The Duke's Archives"),
-  to = c("Firelink Shrine", "Undead Burg", "New Londo Ruins", "Undead Parish", "Lower Undead Burg", "Darkroot Garden", "Sen's Fortress", "Darkroot Basin", "Valley of Drakes", "Blighttown", "Quelaag's Domain", "Demon Ruins", "Blighttown", "Anor Londo", "Painted World of Ariamis", "The Duke's Archives", "Tomb of the Giants", "Lost Izalith", "The Duke's Archives", "Crystal Cave", "Demon Ruins", "Lost Izalith", "Kiln of the First Flame", "Ash Lake", "Northern Undead Asylum", "Oolacile Township", "Chasm of the Abyss", "Royal Wood", "Sanctuary Garden", "Oolacile Township", "Undead Burg", "Anor Londo"),
-  width = c(2, 3, 4, 4, 5, 3, 6, 4, 5, 6, 7, 8, 6, 7, 8, 7, 9, 10, 8, 9, 8, 9, 10, 7, 3, 6, 8, 7, 5, 6, 4, 6)+5
-) %>% arrange(from)
-
+#node_preset_data <- data_list$nodes
+#edge_preset_data <- data_list$edges
+load("./Network.rda")
 
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
   
   # Node side of the plots:
-  node_wdata <- reactiveValues(df = node_preset_data, 
+  #node_wdata <- reactiveValues(df = node_preset_data, 
+  #                             row_selected = NULL)
+  node_wdata <- reactiveValues(df = data_list$nodes, 
                                row_selected = NULL)
+  
   
   #output$editable_Ntable <- renderDT(node_wdata$df, selection = "single")  
   output$editable_Ntable <- renderDT(node_wdata$df %>% arrange(id), selection = "single",
@@ -76,7 +83,7 @@ function(input, output, session) {
   })
   
   # Edge side of the plots:
-  edge_wdata <- reactiveValues(df = edge_preset_data,
+  edge_wdata <- reactiveValues(df = data_list$edges,
                                row_selected = NULL)
   
   output$editable_Etable <- renderDT(edge_wdata$df, selection = "single",
@@ -106,6 +113,10 @@ function(input, output, session) {
       edge_wdata$df <- edge_wdata$df[-del_row, ]
     }
   })
+  proxy <- DT::dataTableProxy('editable_Etable')
+  observe({
+    replaceData(proxy, edge_wdata$df)
+  })
   
   #output$NetworkPlot <- renderPlot(
   #  simple_graph(edge_wdata$df, node_wdata$df)
@@ -128,13 +139,14 @@ function(input, output, session) {
       #Create group column
       nodes <- left_join(nodes, cluster_df, by = "label")
       
-      print(as.data.frame(cluster_df))
+      #print(as.data.frame(cluster_df))
       colnames(nodes)[3] <- "group" # Doing this for colouring reasons
-      print(nodes)
+      #print(nodes)
       
       visNetwork(nodes, edges, width = "700px", height = "700px") %>%
         visIgraphLayout() %>%
         visNodes(
+          font = list(size = 25, font = "Comic Sans MS"),
           shape = "dot",
           color = list(
             background = "#0085AF",
@@ -166,20 +178,61 @@ function(input, output, session) {
     edge_wdata$df <- data.frame(from = character(), to = character(), wdith = numeric())
   })
   observeEvent(input$bupload, {
-    if(!is.null(input$upload)) {
-      upload_data <- readRDA(input$upload$datapath)
-      nodes_wdata$df <- upload_data$nodes
-      edges_wdata$df <- upload_data$edges
+    if(!is.null(input$file)) {
+      #upload_data <- readRDS(input$upload$datapath)
+      #upload_data <- load(input$upload$datapath)
+      infile <- input$file
+      file <- infile$datapath
+      print(infile)
+      e = new.env()
+      upload_data <- load(input$upload$datapath, envir = e)
+      
+      #print(e[[1]])
+      #nodes_wdata$df <- upload_data$nodes
+      #edges_wdata$df <- upload_data$edges
     }
+    #data_input <- input_data()
+    
+    #node_wdata$df <- data_input$nodes
+    #edge_wdata$df <- data_input$edges
   })
-  output$download <- downloadHandler(
-    filename = "Network.rda",
-    content = function(file) {
-      data_list <- list(
-        nodes = nodes_wdata$df,
-        edges = edges_wdata$df
+  
+    #input_data <- reactive({
+    #  req(input$file)
+    #  
+    #  ext <- tools::file_ext(input$file$name)
+    #  switch(ext, 
+    #         RData = load(input$file$datapath), delim = ",",
+    #         rda = load(input$file$datapath),
+    #         validate("Invalid Input"))
+    #})
+  
+  data_list <- reactiveValues()
+  observe({
+    if(!is.null(node_wdata$df) & !is.null(edge_wdata$df)) {
+      isolate(
+        data_list <<- list(nodes = node_wdata$df,
+                  edges = edge_wdata$df)
       )
-      save(data_list, file)
+    }
+  }) # Had to use stackoverflow for this - just couldn't solve it normally
+  output$download <- downloadHandler(
+    filename = function() {
+      paste("Network.rda")
+    },
+    content = function(file){
+      #print(data_list)
+      #return(data_list)
+      #saveRDS(data_list, file = "Network.RData")
+      
+      print(data_list$edges)
+      save(data_list, file=file)
     }
   )
+  outputOptions(output, "download", suspendWhenHidden = FALSE)
+    ## Kept running into a download.htm being downloaded. Didn't work unfortunately
+  observeEvent(input$screenshot, {
+    ## Taking a screenshot of the plot  
+    screenshot(selector = "#NetworkPlot", scale = 3)
+  })
 }

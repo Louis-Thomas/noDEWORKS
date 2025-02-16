@@ -13,6 +13,7 @@ library(tidyverse)
 library(visNetwork)
 library(geomnet)
 library(igraph)
+library(shinyscreenshot)
 
 df <- dplyr::tibble(id = character(), label = character())
 
@@ -43,9 +44,9 @@ fluidPage(
             #actionButton("update_edge", "Update edge"), 
             h5(id = "EdgeUpdater","Static text to change when making new edges"),
             hr(),
-            fileInput("upload", NULL, buttonLabel = "Upload...", multiple = TRUE, accept = ".rda"),
-            actionButton("bupload", "Press to Load own dataset"),
-            downloadButton("download", "Download RDS file"),
+            #fileInput("file", NULL, buttonLabel = "Upload...", accept = c(".RData", ".rda")),
+            #actionButton("bupload", "Press to Load own dataset"),
+            downloadButton("download", "Download RDA file"),
           ),
   
           # Show a plot of the generated distribution
@@ -58,7 +59,8 @@ fluidPage(
     tabPanel("Plot",
       sidebarLayout(
         sidebarPanel(
-          actionButton("Plot", "Plot Network")
+          actionButton("Plot", "Plot Network"),
+          actionButton("screenshot", "Take a screen-shot of the plot")
         ),        
         mainPanel(
           visNetworkOutput(outputId = "NetworkPlot", width = "100%", height = "1000px")
@@ -66,6 +68,11 @@ fluidPage(
       )
     ),
     tabPanel("Help",
+             h5("How to use the app"),
+             h5("Nodes and Edges"),
+             h4("How we came up with the name:"),
+             h5("Brain storm session"),
+             img(src=".\test\shinyscreenshot.png")
              )
   )
   
