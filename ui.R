@@ -68,11 +68,35 @@ fluidPage(
       )
     ),
     tabPanel("Help",
-             h5("How to use the app"),
-             h5("Nodes and Edges"),
-             h4("How we came up with the name:"),
-             h5("Brain storm session"),
-             img(src=".\test\shinyscreenshot.png")
+             h3("How to use the app"),
+             p("Nodes and Edges"),
+             p("How we came up with the name:"),
+             p("Brain storm session"),
+             #img(src="https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/shinyscreenshot.png"),
+             img(
+               #src = "https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/shinyscreenshot.png",
+               src = "https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/Brainstorm.png",
+               #src = "./test/Brainstorm.png",
+               alt = "Image of us brainstorming the name: https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/shinyscreenshot.png",
+               width = 25, height = 25
+             ),
+             #img(src = "./test/shinyscreenshot.png"),
+             hr(),
+             h4("Current Plot"),
+             p("This current plot"),
+             hr(),
+             p("Adding nodes: Input name and create node. "),
+             p("Adding edges, make sure they have they exist in the node table first"),
+             p("Reset the table you can using reset."),
+             hr(),
+             p("If you want to take a screenshot of the plot, press the button"),
+             p("You can move the nodes around in the plot. Just hold and move."),
+             img(
+               src = "https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/shinyscreenshot.png",
+               alt = "Image of me adding and moving nodes around: https://github.com/Louis-Thomas/noDEWORKS/blob/main/test/shinyscreenshot.png",
+               width = 25, height = 25
+             ),             
+             p("This image is what I created. This is the map of darksouls 1. It is moved around to match what the actual map would like")
              )
   )
   
