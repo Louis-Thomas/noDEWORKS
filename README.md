@@ -8,4 +8,4 @@ This was inspired by my SPUR project from summer 2024. Where we were making soci
 I had used igraph and visnetwork before. I thought that it would be interesting to add some sort of interactive element, where you can make conenctions and nodes.  
 
 ### Name
-![./test/Brainstorm.png]
+!(./test/Brainstorm.png)
